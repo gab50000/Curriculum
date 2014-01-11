@@ -54,18 +54,21 @@ def createcv():
 
 @auth.requires_login()
 def deletecv():
-    
+#    cvcontent= db()
+    return request.vars
 
 @auth.requires_login()
 def managecvs():
     query = auth.user_id == db.curriculum.u_id
     return dict(cvs=db(query).select())
 
-
 def editcv():
-    applicationform=crud.create(db.job_application)
-    applicantform=crud.create(db.applicant)
-    return dict(applicationform=applicationform, applicantform=applicantform)
+    cvid=request.vars["cid"]
+    query= db.applicant.cv_id == db.cvsection.cv_id == db.cventry.cv_id == db.cvlistitem.cv_id == db.job_application.cv_id == cvid
+    # applicationform=crud.create(db.job_application)
+    # applicantform=crud.create(db.applicant)
+    return dict(entries= db(query).select())
+    # return dict(applicationform=applicationform, applicantform=applicantform)
 
 def newsection():
     form = crud.create(db.cvsection)

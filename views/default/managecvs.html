@@ -2,8 +2,10 @@
 <table border="1">
 	{{for cv in cvs:}}
 	<tr>
-		<td>{{=A("Lebenslauf "+str(cv.id), _href="managecv.html")}}</td><td>{{=A("Löschen", callback=URL("deletecv", post=)}}</td>
+		<td>{{=A("Lebenslauf "+str(cv.id), _href="editcv.html?cid="+str(cv.id))}}</td><td>{{=A("Löschen", callback=URL("deletecv?cid="+str(cv.id)))}}</td>
 	</tr>
 	{{pass}}
 </table>
 	<p>{{=INPUT(_type="button", _value="Neuer Lebenslauf", _onclick="createcv.html")}}</p>
+
+{{=BEAUTIFY(request.vars)}}

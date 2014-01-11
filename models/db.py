@@ -106,22 +106,28 @@ db.define_table("cvsection",
 db.define_table("cventry",
                 Field("cv_id", "reference curriculum"),
                 Field("title", "string"),
-                Field("description", "string")
+                Field("description", "text")
                 )
 
 db.define_table("cvlistitem",
                 Field("cv_id", "reference curriculum"),
-                Field("story", "string")
+                Field("story", "text")
                 )
 
 db.define_table("job_application",
-                # Field("")
+                Field("cv_id", "reference curriculum"),
                 Field("recipient", "string"),
                 Field("recipient_adress"),
                 Field("datum", "date", default=datetime.today()),
                 Field("opening", "string", default="Sehr geehrter Herr X"),
                 Field("closing", "string", default="Mit freundlichen Grüßen,"),
-                Field("story", "string", length=10000, represent=lambda text,row:TEXTAREA(text))
+                Field("story", "text")
                 )
+
+db.applicant.cv_id.requires = IS_IN_DB(db, "curriculum.id")
+db.cvsection.cv_id.requires = IS_IN_DB(db, "curriculum.id")
+db.cventry.cv_id.requires = IS_IN_DB(db, "curriculum.id")
+db.cvlistitem.cv_id.requires = IS_IN_DB(db, "curriculum.id")
+db.job_application.cv_id.requires = IS_IN_DB(db, "curriculum.id")
 
 auth.enable_record_versioning(db)

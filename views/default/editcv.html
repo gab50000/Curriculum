@@ -1,5 +1,6 @@
 {{extend "layout.html"}}
-{{=applicantform}}
-{{=applicationform}}
-
+{{#=applicantform}}
+{{#=applicationform}}
+{{=BEAUTIFY(entries)}}
 {{=A("Zum Start", _href=URL("index"))}} {{=A("Neue Section", _href=URL("newsection"))}}
+{{=request.vars}}
