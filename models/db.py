@@ -86,17 +86,18 @@ from datetime import datetime
 
 db.define_table("curriculum",
                 Field("u_id", "reference auth_user", default = auth.user_id),
-                Field("datum", "date", default=datetime.today())
-                )
-
-db.define_table("applicant",
-                Field("cv_id", "reference curriculum", default=request.vars["cvid"]),
+                Field("datum", "date", default=datetime.today()),
                 Field("picture", "upload"),
                 Field("firstname", "string"),
                 Field("surname", "string"),
                 Field("adress", "string"),
                 Field("telephone", "string"),
-                Field("email", "string")
+                Field("email", "string"),
+                Field("recipient", "string"),
+                Field("recipient_adress"),
+                Field("opening", "string", default="Sehr geehrter Herr X"),
+                Field("closing", "string", default="Mit freundlichen Grüßen,"),
+                Field("story", "text")
                 )
 
 db.define_table("cvsection",
@@ -116,15 +117,6 @@ db.define_table("cvlistitem",
                 Field("story", "text")
                 )
 
-db.define_table("job_application",
-                Field("cv_id", "reference curriculum"),
-                Field("recipient", "string"),
-                Field("recipient_adress"),
-                Field("datum", "date", default=datetime.today()),
-                Field("opening", "string", default="Sehr geehrter Herr X"),
-                Field("closing", "string", default="Mit freundlichen Grüßen,"),
-                Field("story", "text")
-                )
 
 db.curriculum.u_id.writable=False
 db.curriculum.datum.writable=False

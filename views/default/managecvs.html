@@ -1,3 +1,5 @@
 {{extend "layout.html"}}
-<h>Lebensläufe:</h>
-{{=form}}
+<h3>Lebensläufe:</h3>
+{{for i,s in enumerate(selection):}}
+<p>{{=A("Bewerbung "+str(i+1), _href="editcv?cvid="+str(s.id))}} {{=s.datum}}</p>
+{{pass}}

@@ -61,14 +61,8 @@ def deletecv():
 def managecvs():
     #(auth.user_id == db.curriculum.u_id) & 
     # query = (db.applicant.cv_id == db.curriculum.id) & (db.job_application.cv_id == db.curriculum.id)
-    form = db(auth.user_id == db.curriculum.u_id).select(orderby=db.curriculum.id)
-    if len(form)==0:
-        form = crud.create(db.curriculum)
-        crud.settings.create_next = URL('managecvs')
-    else:
-        
-
-    return dict(form=form)
+    selection=db(auth.user_id == db.curriculum.u_id).select(db.curriculum.id, db.curriculum.datum, orderby=db.curriculum.id)
+    return dict(selection=selection)
 
 # def editcv():
 #     cvid=request.vars["cid"]
