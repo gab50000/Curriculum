@@ -121,11 +121,9 @@ db.define_table("cvlistitem",
 db.curriculum.u_id.writable=False
 db.curriculum.datum.writable=False
 #db.applicant.cv_id.readable = db.cvsection.cv_id.readable = db.cvlistitem.section_id.readable = db.cventry.section_id.readable = db.job_application.cv_id.readable =False
-db.applicant.id.readable = db.cvsection.id.readable = db.cvlistitem.id.readable = db.cventry.id.readable = db.job_application.id.readable =False
-db.applicant.cv_id.writable = db.cvlistitem.section_id.writable = db.cventry.section_id.writable = db.cvsection.cv_id.writable =db.job_application.cv_id.writable = False
-db.applicant.cv_id.requires = IS_IN_DB(db, "curriculum.id")
+db.cvsection.id.readable = db.cvlistitem.id.readable = db.cventry.id.readable = False
+db.cvlistitem.section_id.writable = db.cventry.section_id.writable = db.cvsection.cv_id.writable = False
 db.cvsection.cv_id.requires = IS_IN_DB(db, "curriculum.id")
 db.cventry.section_id.requires = IS_IN_DB(db, "cvsection.id")
 db.cvlistitem.section_id.requires = IS_IN_DB(db, "cvsection.id")
-db.job_application.cv_id.requires = IS_IN_DB(db, "curriculum.id")
 auth.enable_record_versioning(db)

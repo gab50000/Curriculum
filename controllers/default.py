@@ -53,16 +53,13 @@ def createcv():
     db.curriculum.insert(u_id=auth.user_id)
 
 @auth.requires_login()
-def deletecv():
-#    cvcontent= db()
-    return request.vars
-
-@auth.requires_login()
 def managecvs():
+    form = SQLFORM.smartgrid(db.curriculum, linked_tables=["cvsection"])
+    return dict(form=form)
     #(auth.user_id == db.curriculum.u_id) & 
     # query = (db.applicant.cv_id == db.curriculum.id) & (db.job_application.cv_id == db.curriculum.id)
-    selection=db(auth.user_id == db.curriculum.u_id).select(db.curriculum.id, db.curriculum.datum, orderby=db.curriculum.id)
-    return dict(selection=selection)
+    # selection=db(auth.user_id == db.curriculum.u_id).select(db.curriculum.id, db.curriculum.datum, orderby=db.curriculum.id)
+    # return dict(selection=selection)
 
 # def editcv():
 #     cvid=request.vars["cid"]
@@ -77,25 +74,20 @@ def managecvs():
 
     # return dict(entries= content)
     # return dict(applicationform=applicationform, applicantform=applicantform)
-
+@auth.requires_login()
 def editcv():
-    cvid=request.vars["cvid"]
-    query = db.applicant.cv_id == cvid
-    # & (db.cvsection.cv_id == cvid) & (db.job_application.cv_id == cvid)
-    if db(query) == None:
-        form = SQLFORM.grid(query, deletable=False, create=True, searchable=False, csv=False)
-    else:
-        applicant_ids = db(query).select(db.applicant.id)
-
-        forms= [crud.read(db.applicant, appid["id"]) for appid in applicant_ids]
-
-
-    return dict(forms = forms, q=db(query))
+    cvid=request.args(0)
+    # cvid=request.vars["cvid"]
+    query = db.curriculum.id == cvid
+    form= SQLFORM.grid(query, editable=True, csv=False, create=False, searchable=False)
+    form2= SQLFORM(db.curriculum, cvid)
+    arg=request.args(0)
+    return dict(form = form, form2=form2, arg=arg)
 
 def editapplicant():
     cvid=request.vars["cid"]
-    applicantform = SQLFORM.grid(db.applicant.cv_id == cvid)
-    return dict(form = applicantform)
+    form = SQLFORM.grid(db.applicant.cv_id == cvid, editable=True)
+    return dict(form = form)
 
 def newsection():
     form = crud.create(db.cvsection)
