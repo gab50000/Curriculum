@@ -83,7 +83,6 @@ use_janrain(auth, filename='private/janrain.key')
 
 from datetime import datetime
 
-
 db.define_table("curriculum",
                 Field("u_id", "reference auth_user", default = auth.user_id),
                 Field("datum", "date", default=datetime.today()),

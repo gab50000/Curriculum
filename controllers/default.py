@@ -90,12 +90,36 @@ def editapplicant():
     return dict(form = form)
 
 def newsection():
+    cvid=request.args(0)
     form = crud.create(db.cvsection)
     return dict(form=form)
+@auth.requires_login()
+def viewcomplete():
+    cvid=request.args(0)
+    currform = crud.update(db.curriculum, cvid)
+    sections = db(db.cvsection.cv_id == cvid).select()
+    #keys are the section.ids
+    cventries = dict()
+    cvlistitems = dict()
+    cvsections= dict()
 
-def createsection():
-    pass
-    # db.cvsection.
+    for section in sections:
+        cvsections[section.id] = crud.update(db.cvsection, section.id)
+
+        cventries[section.id] = []
+        cventry_rows = db(db.cventry.section_id == section.id).select()
+        for cventry in cventry_rows:
+            cventries[section.id].append(crud.update(db.cventry, cventry.id))
+
+        cvlistitems[section.id] = []
+        cvlistitem_rows = db(db.cvlistitem.section_id == section.id).select()
+        for cvlistitem in cvlistitem_rows:
+            cvlistitems[section.id].append(crud.update(db.cvlistitem, cvlistitem.id))
+
+    return dict(curriculum = currform, cventries=cventries, cvlistitems=cvlistitems, cvsections=cvsections)
+
+
+
 
 @cache.action()
 def mydownload():
