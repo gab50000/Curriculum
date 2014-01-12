@@ -64,10 +64,16 @@ def managecvs():
 
 def editcv():
     cvid=request.vars["cid"]
-    query= db.applicant.cv_id == db.cvsection.cv_id == db.cventry.cv_id == db.cvlistitem.cv_id == db.job_application.cv_id == cvid
-    # applicationform=crud.create(db.job_application)
-    # applicantform=crud.create(db.applicant)
-    return dict(entries= db(query).select())
+
+    applicant=db(db.applicant.cv_id == cvid).select()
+    cvsection=db(db.cvsection.cv_id == cvid).select()
+    cventry=db(db.cventry.cv_id == cvid).select()
+    cvlistitem=db(db.cvlistitem.cv_id == cvid).select()
+    job_application=db(db.job_application.cv_id == cvid).select()
+
+    content=dict(applicant=applicant, cvsection=db.cvsection, cventry=db.cventry, cvlistitem=db.cvlistitem, job_application=db.job_application)
+
+    return dict(entries= content)
     # return dict(applicationform=applicationform, applicantform=applicantform)
 
 def newsection():
