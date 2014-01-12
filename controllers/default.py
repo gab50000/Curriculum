@@ -59,22 +59,49 @@ def deletecv():
 
 @auth.requires_login()
 def managecvs():
-    query = auth.user_id == db.curriculum.u_id
-    return dict(cvs=db(query).select())
+    #(auth.user_id == db.curriculum.u_id) & 
+    # query = (db.applicant.cv_id == db.curriculum.id) & (db.job_application.cv_id == db.curriculum.id)
+    form = db(auth.user_id == db.curriculum.u_id).select(orderby=db.curriculum.id)
+    if len(form)==0:
+        form = crud.create(db.curriculum)
+        crud.settings.create_next = URL('managecvs')
+    else:
+        
+
+    return dict(form=form)
+
+# def editcv():
+#     cvid=request.vars["cid"]
+
+#     applicant=db(db.applicant.cv_id == cvid).select()
+#     cvsection=db(db.cvsection.cv_id == cvid).select()
+#     cventry=db(db.cventry.cv_id == cvid).select()
+#     cvlistitem=db(db.cvlistitem.cv_id == cvid).select()
+#     job_application=db(db.job_application.cv_id == cvid).select()
+
+#     content=dict(applicant=applicant, cvsection=db.cvsection, cventry=db.cventry, cvlistitem=db.cvlistitem, job_application=db.job_application)
+
+    # return dict(entries= content)
+    # return dict(applicationform=applicationform, applicantform=applicantform)
 
 def editcv():
+    cvid=request.vars["cvid"]
+    query = db.applicant.cv_id == cvid
+    # & (db.cvsection.cv_id == cvid) & (db.job_application.cv_id == cvid)
+    if db(query) == None:
+        form = SQLFORM.grid(query, deletable=False, create=True, searchable=False, csv=False)
+    else:
+        applicant_ids = db(query).select(db.applicant.id)
+
+        forms= [crud.read(db.applicant, appid["id"]) for appid in applicant_ids]
+
+
+    return dict(forms = forms, q=db(query))
+
+def editapplicant():
     cvid=request.vars["cid"]
-
-    applicant=db(db.applicant.cv_id == cvid).select()
-    cvsection=db(db.cvsection.cv_id == cvid).select()
-    cventry=db(db.cventry.cv_id == cvid).select()
-    cvlistitem=db(db.cvlistitem.cv_id == cvid).select()
-    job_application=db(db.job_application.cv_id == cvid).select()
-
-    content=dict(applicant=applicant, cvsection=db.cvsection, cventry=db.cventry, cvlistitem=db.cvlistitem, job_application=db.job_application)
-
-    return dict(entries= content)
-    # return dict(applicationform=applicationform, applicantform=applicantform)
+    applicantform = SQLFORM.grid(db.applicant.cv_id == cvid)
+    return dict(form = applicantform)
 
 def newsection():
     form = crud.create(db.cvsection)

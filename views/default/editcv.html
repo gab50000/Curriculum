@@ -1,11 +1,6 @@
 {{extend "layout.html"}}
-{{#=applicantform}}
-{{#=applicationform}}
-{{entry=entries["applicant"][0]}}
-<h2>Applicant</h2>
-<p>{{=entry.firstname}} {{=entry.surname}}</p>
-<p>{{=entry.adress}}</p>
-<p>{{=entry.telephone}}</p>
-<p>{{=entry.email}}</p>
-{{=A("Zum Start", _href=URL("index"))}} {{=A("Neue Section", _href=URL("newsection"))}}
-{{=request.vars}}
+<h3>Applicant</h3>
+{{for form in forms:}}
+{{=form}}
+{{pass}}
+{{=q}}

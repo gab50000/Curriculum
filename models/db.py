@@ -83,8 +83,14 @@ use_janrain(auth, filename='private/janrain.key')
 
 from datetime import datetime
 
+
+db.define_table("curriculum",
+                Field("u_id", "reference auth_user", default = auth.user_id),
+                Field("datum", "date", default=datetime.today())
+                )
+
 db.define_table("applicant",
-                Field("cv_id", "reference curriculum"),
+                Field("cv_id", "reference curriculum", default=request.vars["cvid"]),
                 Field("picture", "upload"),
                 Field("firstname", "string"),
                 Field("surname", "string"),
@@ -93,24 +99,20 @@ db.define_table("applicant",
                 Field("email", "string")
                 )
 
-db.define_table("curriculum",
-                Field("u_id", "reference auth_user"),
-                Field("datum", "date", default=datetime.today())
-                )
-
 db.define_table("cvsection",
                 Field("cv_id", "reference curriculum"),
+                Field("title", "string"),
                 Field("cvposition", "integer")
                 )
 
 db.define_table("cventry",
-                Field("cv_id", "reference curriculum"),
+                Field("section_id", "reference cvsection"),
                 Field("title", "string"),
                 Field("description", "text")
                 )
 
 db.define_table("cvlistitem",
-                Field("cv_id", "reference curriculum"),
+                Field("section_id", "reference cvsection"),
                 Field("story", "text")
                 )
 
@@ -124,10 +126,14 @@ db.define_table("job_application",
                 Field("story", "text")
                 )
 
+db.curriculum.u_id.writable=False
+db.curriculum.datum.writable=False
+#db.applicant.cv_id.readable = db.cvsection.cv_id.readable = db.cvlistitem.section_id.readable = db.cventry.section_id.readable = db.job_application.cv_id.readable =False
+db.applicant.id.readable = db.cvsection.id.readable = db.cvlistitem.id.readable = db.cventry.id.readable = db.job_application.id.readable =False
+db.applicant.cv_id.writable = db.cvlistitem.section_id.writable = db.cventry.section_id.writable = db.cvsection.cv_id.writable =db.job_application.cv_id.writable = False
 db.applicant.cv_id.requires = IS_IN_DB(db, "curriculum.id")
 db.cvsection.cv_id.requires = IS_IN_DB(db, "curriculum.id")
-db.cventry.cv_id.requires = IS_IN_DB(db, "curriculum.id")
-db.cvlistitem.cv_id.requires = IS_IN_DB(db, "curriculum.id")
+db.cventry.section_id.requires = IS_IN_DB(db, "cvsection.id")
+db.cvlistitem.section_id.requires = IS_IN_DB(db, "cvsection.id")
 db.job_application.cv_id.requires = IS_IN_DB(db, "curriculum.id")
-
 auth.enable_record_versioning(db)
