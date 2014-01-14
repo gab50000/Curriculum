@@ -6,9 +6,13 @@
 	{{=cvsections[sectionid]}}
 	{{for cventry in cventries[sectionid]:}}
 		{{=cventry}}
-		{{=A("Delete"), _href=}}
+		{{=A("Löschen", callback=URL("deletesection"))}}
+	{{pass}}
+	{{if len(cventries[sectionid]) == 0:}}
+		{{=A("Neuer Entry", callback=URL("deletesection"))}}
 	{{pass}}
 	{{for cvlistitem in cvlistitems[sectionid]:}}
 		{{=cvlistitem}}
 	{{pass}}
 {{pass}}
+{{=A("Neue Section", callback=URL("newsection"))}}

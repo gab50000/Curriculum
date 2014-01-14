@@ -89,6 +89,9 @@ def editapplicant():
     form = SQLFORM.grid(db.applicant.cv_id == cvid, editable=True)
     return dict(form = form)
 
+def delete_section():
+    return dict()
+
 def newsection():
     cvid=request.args(0)
     form = crud.create(db.cvsection)
