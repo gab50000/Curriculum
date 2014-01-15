@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
-beginning="""\documentclass[11pt, a4paper]{moderncv}
-\moderncvtheme{classic}
-\moderncvcolor{green}
-\usepackage[utf8]{inputenc}"""
+beginning="""\\documentclass[11pt, a4paper]{moderncv}
+\\moderncvtheme{classic}
+\\moderncvcolor{green}
+\\usepackage[utf8]{inputenc}"""
 
 name="\\name{%s}{%s}"
 address = "\\address{%s}{%s}"
