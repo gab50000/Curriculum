@@ -18,18 +18,23 @@ middle ="""\begin{document}
 \makecvtitle"""
 
 section = "\section{$sectiontitle}"
-cventry = "\cventry{$from -- $to}{$what}{$name}{$where}{\textit{$mark}}{}"
+cventry = "\cventry{$from -- $to}{$what}{$name}{$where}{\\textit{$mark}}{}"
 cvitem  = "\cvitem{$title}{$cvitemdescription}"
 cvlistitem = "\cvlistitem{$cvlistitemdescription}"
 
-ending = """\recipient{%s}{%s}
+ending = """\\recipient{%s}{%s}
 \date{%s}
 \opening{%s}
 \closing{%s}
 \makelettertitle
 $story
-\newline\newline
+\\newline\\newline
 \makeletterclosing
 \end{%s}"""
 
-def generate():
+def generate(cvsections, cventries, cvlistitems, ):
+	with open("../../private/cv.tex") as f:
+		for cid in cvsections.keys():
+			for cventry in cventries[cid]:
+				print >> f, cventry.title, cventry.text
+			for 

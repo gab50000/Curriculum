@@ -10,6 +10,7 @@
 #########################################################################
 
 import os
+from collections import OrderedDict
 
 def index():
     """
@@ -102,9 +103,9 @@ def viewcomplete():
     currform = crud.update(db.curriculum, cvid)
     sections = db(db.cvsection.cv_id == cvid).select()
     #keys are the section.ids
-    cventries = dict()
-    cvlistitems = dict()
-    cvsections= dict()
+    cventries = OrderedDict()
+    cvlistitems = OrderedDict()
+    cvsections= OrderedDict()
 
     for section in sections:
         cvsections[section.id] = crud.update(db.cvsection, section.id)

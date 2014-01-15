@@ -108,12 +108,21 @@ db.define_table("cvsection",
 db.define_table("cventry",
                 Field("section_id", "reference cvsection"),
                 Field("title", "string"),
-                Field("description", "text")
+                Field("description", "text"),
+                Field("cvposition", "integer")
+                )
+
+db.define_table("cvitem",
+                Field("section_id", "reference cvsection"),
+                Field("title", "string")
+                Field("story", "text"),
+                Field("cvposition", "integer")
                 )
 
 db.define_table("cvlistitem",
                 Field("section_id", "reference cvsection"),
-                Field("story", "text")
+                Field("story", "text"),
+                Field("cvposition", "integer")
                 )
 
 
