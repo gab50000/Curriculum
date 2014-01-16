@@ -11,6 +11,11 @@
 
 import os
 from collections import OrderedDict
+from datetime import datetime
+import random
+
+def randomstring(length):
+    return "".join(map(lambda x:str(unichr(x)), [random.randint(97, 122) for i in range(length)]))
 
 def index():
     """
@@ -97,6 +102,21 @@ def newsection():
     cvid=request.args(0)
     form = crud.create(db.cvsection)
     return dict(form=form)
+
+@auth.requires_login()
+def generateCurriculum():
+    db.curriculum.insert(u_id=auth.user_id, datum=datetime.today(), picture=None, firstname=randomstring(6), surname=randomstring(10), \
+        adress=randomstring(15), telephone="".join(map(str, [random.randint(0,9) for i in range(8)])), email=randomstring(4)+"@"+randomstring(6)+".de", \
+        recipient=randomstring(10), recipient_adress=randomstring(10), opening=randomstring(20), closing=randomstring(20), story=randomstring(400))
+
+    sectionnumber = random.randint(0,5)
+
+    for i in xrange(sectionnumber):
+        db.cvsection.insert()
+
+    return dict(form=SQLFORM.grid(db.curriculum.u_id == auth.user_id, editable =False))
+
+
 @auth.requires_login()
 def viewcomplete():
     cvid=request.args(0)
