@@ -17,14 +17,9 @@ import random
 def randomstring(length):
     return "".join(map(lambda x:str(unichr(x)), [random.randint(97, 122) for i in range(length)]))
 
+@auth.requires_login()
 def index():
-    """
-    example action using the internationalization operator T and flash
-    rendered by views/default/index.html or views/generic.html
 
-    if you need a simple wiki simply replace the two lines below with:
-    return auth.wiki()
-    """
     response.flash = T("Welcome to web2py!")
     return dict(message=T('Hello World'))
 
@@ -54,9 +49,9 @@ def download():
     """
     return response.download(request, db)
 
-@auth.requires_login()
-def createcv():
-    db.curriculum.insert(u_id=auth.user_id)
+# @auth.requires_login()
+# def createcv():
+#     db.curriculum.insert(u_id=auth.user_id)
 
 @auth.requires_login()
 def managecvs():
@@ -104,7 +99,7 @@ def newsection():
     return dict(form=form)
 
 @auth.requires_login()
-def generateCurriculum():
+def view_curriculum():
     db.curriculum.insert(u_id=auth.user_id, datum=datetime.today(), picture=None, firstname=randomstring(6), surname=randomstring(10), \
         adress=randomstring(15), telephone="".join(map(str, [random.randint(0,9) for i in range(8)])), email=randomstring(4)+"@"+randomstring(6)+".de", \
         recipient=randomstring(10), recipient_adress=randomstring(10), opening=randomstring(20), closing=randomstring(20), story=randomstring(400))
@@ -142,7 +137,14 @@ def viewcomplete():
 
     return dict(curriculum = currform, cventries=cventries, cvlistitems=cvlistitems, cvsections=cvsections)
 
-
+@auth.requires_login()
+def viewcv():
+    # cvid=request.args(0)
+    cvid=1
+    query = (db.curriculum.u_id == auth.user_id) & (db.cvsection.cv_id == db.curriculum.id) & (db.cventry.section_id ==\
+           db.cvlistitem.section_id == db.cvitem.section_id == db.cvsection.id)
+    form = SQLFORM.grid(query)#(db.cvsection.cv_id == db.curriculum.id) & (db.curriculum.u_id == auth.user_id) )
+    return dict(form=form, cvid=cvid, uid=auth.user_id)
 
 
 @cache.action()
@@ -155,6 +157,8 @@ def mydownload():
     os.system("echo \""+str(session.counter)+" mal aufgerufen\" > "+path)
     return response.stream(path)
 
+def cvform():
+    return dict()
 
 def call():
     """

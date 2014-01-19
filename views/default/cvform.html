@@ -1,0 +1,44 @@
+{{extend "layout.html"}}
+
+<form id="cvform">
+	<p>	<input name="photo" id="photo" type="file"/></p>
+	<p>	<input name="name" id="name" value="Vorname"/></p>
+	<p>	<input name="surname" id="surname" value="Nachname"/> <p>
+	<p>	<input name="street" id="street" value="Straße"/> <p>
+	<p>	<input name="streetnr" id="streetnr" value="Hausnummer"/> <p>
+	<p>	<input name="phone" id="phone" value="Telefon"/> <p>
+	<p>	<input name="mobile" id="mobile" value="Handy"/> <p>
+	<p>	<input name="email" id="email" value="Email"/> <p>
+</form>
+
+<form id="cvsections" name="cvsections">
+	<input type="button" value="New Section" onclick='alert(document.getElementsByTagName("html")[0].class)';/>
+</form>
+
+<script>
+/*
+jQuery('#cvform').submit(function() {
+  ajax('{{=URL('showreqvars')}}',
+       ['message'], 'ziel');
+  return false;
+});
+*/
+
+
+function sectionhandler(){
+	this.counter=0;
+	this.newsection = function newsection(){
+		this.counter += 1;
+		var newsection = document.createElement("input");
+		newsection.name = "title"+this.counter;
+		newsection.id = "title"+this.counter;
+		newsection.type="text"
+		var paragraph = document.createElement("p");
+		paragraph.appendChild(newsection);
+		document.getElementById("cvsections").appendChild(paragraph);
+	}
+}
+
+var sh=new sectionhandler();
+
+</script>
