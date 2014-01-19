@@ -12,7 +12,7 @@
 </form>
 
 <form id="cvsections" name="cvsections">
-	<input type="button" value="New Section" onclick='alert(document.getElementsByTagName("html")[0].class)';/>
+	<input type="button" value="New Section" onclick='sh.newsection()';/>
 </form>
 
 <script>
@@ -24,18 +24,96 @@ jQuery('#cvform').submit(function() {
 });
 */
 
+function cventry(){
+	var paragraph = document.createElement("p");
+	var from = document.createElement("input");
+	paragraph.appendChild(from);
+	var to = document.createElement("input");
+	paragraph.appendChild(to);
+	var what = document.createElement("input");
+	paragraph.appendChild(what);
+	var name = document.createElement("input");
+	paragraph.appendChild(name);
+	var where = document.createElement("input");
+	paragraph.appendChild(where);
+	return paragraph;
+}
+
+function cvlistitem(){
+	var paragraph = document.createElement("p");
+	var description = document.createElement("input");
+	return paragraph;
+}
+
+function cvitem(){
+	var paragraph = document.createElement("p");
+	var title = document.createElement("input");
+	var description = document.createElement("input");
+	return paragraph;
+}
+
+function buttons(section){
+	var paragraph = document.createElement("p");
+	var listitembutton = document.createElement("input");
+	listitembutton.type = "button";
+	listitembutton.value = "ListItem";
+	listitembutton.onclick = function(){alert("listitem");};
+	paragraph.appendChild(listitembutton);
+	var itembutton = document.createElement("input");
+	itembutton.type = "button";
+	itembutton.value = "Item";
+	itembutton.onclick = function(){alert("item");};
+	paragraph.appendChild(itembutton);
+	var entrybutton = document.createElement("input");
+	entrybutton.type = "button";
+	entrybutton.value = "Entry";
+	entrybutton.onclick = function(){section.append(cventry())};
+	paragraph.appendChild(entrybutton);
+
+	return paragraph;
+}
+
+function section(counter){
+	this.title = document.createElement("input");
+	this.title.name = "title"+counter;
+	this.title.id = "title"+counter;
+	this.title.type="text"
+	this.paragraph1 = document.createElement("p");
+	this.paragraph1.appendChild(this.title);
+
+	this.paragraph2 = document.createElement("p");
+
+	this.listitembutton = document.createElement("input");
+	this.listitembutton.type = "button";
+	this.listitembutton.value = "ListItem";
+	this.listitembutton.onclick = function(){alert("listitem");};
+	this.paragraph2.appendChild(this.listitembutton);
+
+	this.itembutton = document.createElement("input");
+	this.itembutton.type = "button";
+	this.itembutton.value = "Item";
+	this.itembutton.onclick = function(){alert("item");};
+	this.paragraph2.appendChild(this.itembutton);
+
+	this.entrybutton = document.createElement("input");
+	this.entrybutton.type = "button";
+	this.entrybutton.value = "Entry";
+	this.entrybutton.onclick = function(){this.paragraph1.append(cventry())};
+	this.paragraph2.appendChild(this.entrybutton);	
+
+	this.insertSection = function(container){
+		container.appendChild(this.paragraph1);
+		container.appendChild(this.paragraph2);
+	}
+}
 
 function sectionhandler(){
 	this.counter=0;
 	this.newsection = function newsection(){
 		this.counter += 1;
-		var newsection = document.createElement("input");
-		newsection.name = "title"+this.counter;
-		newsection.id = "title"+this.counter;
-		newsection.type="text"
-		var paragraph = document.createElement("p");
-		paragraph.appendChild(newsection);
-		document.getElementById("cvsections").appendChild(paragraph);
+		s = new section(this.counter);
+		var sectioncontainer = document.getElementById("cvsections");
+		s.insertSection(sectioncontainer);
 	}
 }
 
